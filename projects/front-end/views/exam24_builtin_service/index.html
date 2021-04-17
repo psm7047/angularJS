@@ -1,0 +1,34 @@
+<div class="card">
+    <div class="card-header">
+        exam24_builtin_service
+    </div>
+    <div class="card-body">
+        <div>
+            <div class="alert alert-primary">$window, $document, $interval 내장 서비스</div>
+            <button class="btn btn-info" ng-click="openAlert()">경고창 띄우기</button>
+            <button class="btn btn-info" ng-click="findDom()">DOM 객체 찾기</button>
+            <button class="btn btn-info" ng-click="startTime()">반복 시작</button>
+            <button class="btn btn-info" ng-click="endTime()">반복 종료</button>
+            <div id="content"></div>
+          </div>
+          <div class="mt-3">
+            <div class="alert alert-primary mt-3">$location 내장 서비스</div>
+            <button class="btn btn-info" ng-click="changeUrl1(1)">1 페이지로 변경</button>
+            <button class="btn btn-info" ng-click="changeUrl2(100, 1)">3 페이지로 변경</button>
+          </div>
+          <div class="mt-2">
+            <div class="alert alert-primary mt-3">$anchorScroll 내장 서비스</div>
+            <p id="top">This is the top</p>
+            <button class="btn btn-primary" ng-click="show('bottom')">Go to Bottom</button>
+            <ul>
+              <li ng-repeat="item in items">{{item}}</li>
+            </ul>
+            <p id="bottom">This is the bottom</p>
+            <button class="btn btn-primary" ng-click="show('top')">Go to Top</button>
+          </div>
+          <div class="mt-2">
+            <div class="alert alert-primary mt-3">$log 내장 서비스</div>
+            <button class="btn btn-primary" ng-click="handlePrintLog()">로그 출력</button>
+          </div>
+    </div>
+</div>
