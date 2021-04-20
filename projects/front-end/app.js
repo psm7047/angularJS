@@ -4,7 +4,7 @@ angular.module("app", ["ngRoute", "exam03Module", "exam04Module"])
         counterServiceByProviderProvider.setCount(100);
         $logProvider.debugEnabled(true);
     })
-    .run(function($rootScope) {
+    .run(function($rootScope, $http) {
         console.log("app - run callback");
         //전역 데이터
         $rootScope.rootUid = "user100";
@@ -12,9 +12,24 @@ angular.module("app", ["ngRoute", "exam03Module", "exam04Module"])
         $rootScope.rootGetGreet = () => {
             return "Hello! AngularJS"
         };
+        //세션 저장소에 있는 uid, authToken을 읽기
+        $rootScope.uid = sessionStorage.getItem("uid");
+        $rootScope.authToken = sessionStorage.getItem("authToken");
+        //$rootScope.authToken의 값의 변화를 감시
+        $rootScope.$watch("authToken", (newValue) => {
+            if(newValue) {
+                $http.defaults.headers.common.authToken = newValue;
+                // sessionStorage.setItem("uid", response.data.uid);
+                // sessionStorage.setItem("authToken", response.data.authToken);
+            }else {
+                delete $http.defaults.headers.common.authToken;
+                // sessionStorage.removeItem("uid");
+                // sessionStorage.removeItem("authToken");
+            }
+        });
     })
     //중첩된 컨트롤러 범위에서 사용할 수 있는 상태 데이터 및 함수
-    .controller("mainController", function($rootScope, $scope) {
+    .controller("mainController", function($rootScope, $scope, $location, $route) {
         $scope.mainUid = "user200";
         $scope.mainGetGreet = () => {
             return "Hello! Main controller";
@@ -22,6 +37,9 @@ angular.module("app", ["ngRoute", "exam03Module", "exam04Module"])
 
         $scope.logout = () => {
             $rootScope.uid = "";
+            $rootScope.authToken = "";
+            sessionStorage.removeItem("uid");
+            sessionStorage.removeItem("authToken");
         };
 
         $scope.$on("loginSuccess",(event, message) => {
@@ -34,4 +52,11 @@ angular.module("app", ["ngRoute", "exam03Module", "exam04Module"])
             console.log("mainController가 loginSuccess 방송 수신함");
             $rootScope.uid = "";
         });
+
+        //이전 URL과 동일한 URL일 경우 리프레쉬 함
+        $scope.reloadable = (path) => {
+            if($location.url().includes(path)) {
+                $route.reload();
+            }
+        };
     });
